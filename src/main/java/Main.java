@@ -6,13 +6,27 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.Optional;
+
 public class Main extends Application {
-    private Library library = new Library("My Library");
-    private Student currentStudent = null;
+    private Library library;
+    private Student currentStudent;
 
     @Override
     public void start(Stage primaryStage) {
-        //book ki inventory
+        library = new Library("My Library");
+
+        // Prepopulate library with books
+        populateLibraryWithBooks();
+
+        // Prepopulate library with students
+        populateLibraryWithStudents();
+
+
+        showInitialPage(primaryStage);
+    }
+
+    private void populateLibraryWithBooks() {
         library.addItem(new Book("B001", "The Great Gatsby", "F. Scott Fitzgerald", "9780743273565"));
         library.addItem(new Book("B002", "1984", "George Orwell", "9780451524935"));
         library.addItem(new Book("B003", "To Kill a Mockingbird", "Harper Lee", "9780060935467"));
@@ -23,136 +37,223 @@ public class Main extends Application {
         library.addItem(new Book("B008", "The Odyssey", "Homer", "9780140268867"));
         library.addItem(new Book("B009", "War and Peace", "Leo Tolstoy", "9780199232765"));
         library.addItem(new Book("B010", "The Divine Comedy", "Dante Alighieri", "9780140448955"));
-
-        // datra base for student
-        library.addStudent(new Student("Alice", "S001", "student1"));
-        library.addStudent(new Student("Bob", "S002", "student2"));
-
-        showLoginPage(primaryStage);
     }
 
-    private void showLoginPage(Stage stage) {
+    private void populateLibraryWithStudents() {
+        library.addStudent(new Student("John Doe", "student1", "password1"));
+        library.addStudent(new Student("Jane Smith", "student2", "password2"));
+    }
+
+    private void showInitialPage(Stage primaryStage) {
+        primaryStage.setTitle("Library System");
+
         VBox pane = new VBox(10);
         pane.setPadding(new Insets(10, 10, 10, 10));
 
-        TextField userField = new TextField();
-        PasswordField passField = new PasswordField();
-        Button loginButton = new Button("Login");
+        Button studentButton = new Button("Student Login");
+        Button adminButton = new Button("Admin Login");
+        pane.getChildren().addAll(studentButton, adminButton);
 
-        pane.getChildren().addAll(new Label("Username:"), userField, new Label("Password:"), passField, loginButton);
+        studentButton.setOnAction(e -> showLoginPage(primaryStage));
+        adminButton.setOnAction(e -> showAdminLoginPage(primaryStage));
+
+        primaryStage.setScene(new Scene(pane, 300, 200));
+        primaryStage.show();
+    }
+
+    private void showLoginPage(Stage primaryStage) {
+        primaryStage.setTitle("Library System - Student Login");
+
+        VBox pane = new VBox(10);
+        pane.setPadding(new Insets(10, 10, 10, 10));
+
+        TextField usernameField = new TextField();
+        PasswordField passwordField = new PasswordField();
+        Button loginButton = new Button("Login");
+        Button signupButton = new Button("New student? SignUp Here!");
+        Button backButton = new Button("Back");
+
+        pane.getChildren().addAll(new Label("Username:"), usernameField, new Label("Password:"), passwordField, loginButton, signupButton, backButton);
 
         loginButton.setOnAction(e -> {
-            String username = userField.getText();
-            String password = passField.getText();
+            String username = usernameField.getText();
+            String password = passwordField.getText();
 
-            if (username.equals("admin") && password.equals("admin")) {
-                showAdminPanel(stage);
-            } else if (username.equals("accounts") && password.equals("accounts")) {
-                showAccountsPanel(stage);
-            } else {
-                Student student = library.getStudents().stream()
-                        .filter(s -> s.getId().equals(username) && s.getPassword().equals(password))
-                        .findFirst()
-                        .orElse(null);
+            currentStudent = library.getStudents().stream()
+                    .filter(s -> s.getId().equals(username) && s.getPassword().equals(password))
+                    .findFirst()
+                    .orElse(null);
 
-                if (student != null) {
-                    currentStudent = student;
-                    showStudentPanel(stage);
-                } else {
-                    showAlert("Login Failed", "Invalid username or password.");
+            if (currentStudent != null) {
+                showStudentPanel(primaryStage);
+                if (currentStudent.getFine() > 0) {
+                    showAlert("Notification", "You have outstanding fines: $" + currentStudent.getFine());
                 }
+            } else {
+                showAlert("Error", "Invalid username or password.");
             }
         });
 
-        Scene scene = new Scene(pane, 300, 200);
-        stage.setScene(scene);
-        stage.setTitle("Library Management System - Login");
-        stage.show();
+        signupButton.setOnAction(e -> showSignupPage(primaryStage));
+        backButton.setOnAction(e -> showInitialPage(primaryStage));
+
+        primaryStage.setScene(new Scene(pane, 300, 200));
+        primaryStage.show();
     }
 
-    private void showAdminPanel(Stage stage) {
+    private void showAdminLoginPage(Stage primaryStage) {
+        primaryStage.setTitle("Library System - Admin Login");
+
         VBox pane = new VBox(10);
         pane.setPadding(new Insets(10, 10, 10, 10));
 
-        Button addButton = new Button("Add Book");
-        Button removeButton = new Button("Remove Book");
-        Button editButton = new Button("Edit Book");
-        Button viewButton = new Button("View Books");
+        TextField usernameField = new TextField();
+        PasswordField passwordField = new PasswordField();
+        Button loginButton = new Button("Login");
+        Button backButton = new Button("Back");
+
+        pane.getChildren().addAll(new Label("Username:"), usernameField, new Label("Password:"), passwordField, loginButton, backButton);
+
+        loginButton.setOnAction(e -> {
+            String username = usernameField.getText();
+            String password = passwordField.getText();
+
+            if (username.equals("admin") && password.equals("admin")) {
+                showAdminPanel(primaryStage);
+            } else if (username.equals("accounts") && password.equals("accounts")) {
+                showAccountsPanel(primaryStage);
+            } else {
+                showAlert("Error", "Invalid admin credentials.");
+            }
+        });
+
+        backButton.setOnAction(e -> showInitialPage(primaryStage));
+
+        primaryStage.setScene(new Scene(pane, 300, 200));
+        primaryStage.show();
+    }
+
+    private void showSignupPage(Stage primaryStage) {
+        primaryStage.setTitle("Sign Up");
+
+        GridPane pane = new GridPane();
+        pane.setPadding(new Insets(10, 10, 10, 10));
+        pane.setVgap(5);
+        pane.setHgap(5);
+
+        TextField nameField = new TextField();
+        TextField idField = new TextField();
+        PasswordField passwordField = new PasswordField();
+        Button signupButton = new Button("Sign Up");
+        Button backButton = new Button("Back");
+
+        pane.add(new Label("Name:"), 0, 0);
+        pane.add(nameField, 1, 0);
+        pane.add(new Label("ID:"), 0, 1);
+        pane.add(idField, 1, 1);
+        pane.add(new Label("Password:"), 0, 2);
+        pane.add(passwordField, 1, 2);
+        pane.add(signupButton, 1, 3);
+        pane.add(backButton, 1, 4);
+
+        signupButton.setOnAction(e -> {
+            String name = nameField.getText();
+            String id = idField.getText();
+            String password = passwordField.getText();
+
+            if (!name.isEmpty() && !id.isEmpty() && !password.isEmpty()) {
+                library.addStudent(new Student(name, id, password));
+                showAlert("Success", "Account created successfully.");
+                showLoginPage(primaryStage);
+            } else {
+                showAlert("Error", "All fields are required.");
+            }
+        });
+
+        backButton.setOnAction(e -> showLoginPage(primaryStage));
+
+        primaryStage.setScene(new Scene(pane, 300, 200));
+        primaryStage.show();
+    }
+
+    private void showAdminPanel(Stage primaryStage) {
+        primaryStage.setTitle("Admin Panel");
+
+        VBox pane = new VBox(10);
+        pane.setPadding(new Insets(10, 10, 10, 10));
+
+        Button addBookButton = new Button("Add Book");
+        Button removeBookButton = new Button("Remove Book");
+        Button editBookButton = new Button("Edit Book");
+        Button viewBooksButton = new Button("View Books");
         Button addStudentButton = new Button("Add Student");
         Button addFineButton = new Button("Add Fine");
         Button removeFineButton = new Button("Remove Fine");
-        Button viewFinesButton = new Button("View All Fines");
-        Button viewBorrowedBooksButton = new Button("View All Borrowed Books");
+        Button viewAllFinesButton = new Button("View All Fines");
+        Button viewAllBorrowedBooksButton = new Button("View All Borrowed Books");
         Button logoutButton = new Button("Logout");
 
-        pane.getChildren().addAll(addButton, removeButton, editButton, viewButton, addStudentButton, addFineButton, removeFineButton, viewFinesButton, viewBorrowedBooksButton, logoutButton);
+        pane.getChildren().addAll(addBookButton, removeBookButton, editBookButton, viewBooksButton, addStudentButton, addFineButton, removeFineButton, viewAllFinesButton, viewAllBorrowedBooksButton, logoutButton);
 
-        addButton.setOnAction(e -> addBook());
-        removeButton.setOnAction(e -> removeBook());
-        editButton.setOnAction(e -> editBook());
-        viewButton.setOnAction(e -> viewBooks());
+        addBookButton.setOnAction(e -> addBook());
+        removeBookButton.setOnAction(e -> removeBook());
+        editBookButton.setOnAction(e -> editBook());
+        viewBooksButton.setOnAction(e -> viewBooks());
         addStudentButton.setOnAction(e -> addStudent());
         addFineButton.setOnAction(e -> addFine());
         removeFineButton.setOnAction(e -> removeFine());
-        viewFinesButton.setOnAction(e -> viewAllFines());
-        viewBorrowedBooksButton.setOnAction(e -> viewAllBorrowedBooks());
-        logoutButton.setOnAction(e -> showLoginPage(stage));
+        viewAllFinesButton.setOnAction(e -> viewAllFines());
+        viewAllBorrowedBooksButton.setOnAction(e -> viewAllBorrowedBooks());
+        logoutButton.setOnAction(e -> showLoginPage(primaryStage));
 
-        Scene scene = new Scene(pane, 300, 400);
-        stage.setScene(scene);
-        stage.setTitle("Library Management System - Admin Panel");
-        stage.show();
+        primaryStage.setScene(new Scene(pane, 300, 400));
+        primaryStage.show();
     }
 
-    private void showStudentPanel(Stage stage) {
+    private void showAccountsPanel(Stage primaryStage) {
+        primaryStage.setTitle("Accounts Panel");
+
         VBox pane = new VBox(10);
         pane.setPadding(new Insets(10, 10, 10, 10));
 
-        Button borrowButton = new Button("Borrow Book");
-        Button returnButton = new Button("Return Book");
+        Button viewAllFinesButton = new Button("View All Fines");
+        Button viewAllBorrowedBooksButton = new Button("View All Borrowed Books");
+        Button logoutButton = new Button("Logout");
+
+        pane.getChildren().addAll(viewAllFinesButton, viewAllBorrowedBooksButton, logoutButton);
+
+        viewAllFinesButton.setOnAction(e -> viewAllFines());
+        viewAllBorrowedBooksButton.setOnAction(e -> viewAllBorrowedBooks());
+        logoutButton.setOnAction(e -> showLoginPage(primaryStage));
+
+        primaryStage.setScene(new Scene(pane, 300, 200));
+        primaryStage.show();
+    }
+
+    private void showStudentPanel(Stage primaryStage) {
+        primaryStage.setTitle("Student Panel");
+
+        VBox pane = new VBox(10);
+        pane.setPadding(new Insets(10, 10, 10, 10));
+
+        Button borrowBookButton = new Button("Borrow Book");
+        Button returnBookButton = new Button("Return Book");
         Button viewFinesButton = new Button("View Fines");
         Button viewBorrowedBooksButton = new Button("View Borrowed Books");
         Button viewAvailableBooksButton = new Button("View Available Books");
         Button logoutButton = new Button("Logout");
 
-        pane.getChildren().addAll(borrowButton, returnButton, viewFinesButton, viewBorrowedBooksButton, viewAvailableBooksButton, logoutButton);
+        pane.getChildren().addAll(borrowBookButton, returnBookButton, viewFinesButton, viewBorrowedBooksButton, viewAvailableBooksButton, logoutButton);
 
-        borrowButton.setOnAction(e -> borrowBook());
-        returnButton.setOnAction(e -> returnBook());
+        borrowBookButton.setOnAction(e -> borrowBook());
+        returnBookButton.setOnAction(e -> returnBook());
         viewFinesButton.setOnAction(e -> viewFines());
         viewBorrowedBooksButton.setOnAction(e -> viewBorrowedBooks());
         viewAvailableBooksButton.setOnAction(e -> viewAvailableBooks());
-        logoutButton.setOnAction(e -> showLoginPage(stage));
+        logoutButton.setOnAction(e -> showLoginPage(primaryStage));
 
-        Scene scene = new Scene(pane, 300, 400);
-        stage.setScene(scene);
-        stage.setTitle("Library Management System - Student Panel");
-
-        if (currentStudent.getFine() > 0) {
-            showAlert("Fine Notification", "You have an outstanding fine of $" + currentStudent.getFine());
-        }
-
-        stage.show();
-    }
-
-    private void showAccountsPanel(Stage stage) {
-        VBox pane = new VBox(10);
-        pane.setPadding(new Insets(10, 10, 10, 10));
-
-        Button viewFinesButton = new Button("View All Fines");
-        Button viewBorrowedBooksButton = new Button("View All Borrowed Books");
-        Button logoutButton = new Button("Logout");
-
-        pane.getChildren().addAll(viewFinesButton, viewBorrowedBooksButton, logoutButton);
-
-        viewFinesButton.setOnAction(e -> viewAllFines());
-        viewBorrowedBooksButton.setOnAction(e -> viewAllBorrowedBooks());
-        logoutButton.setOnAction(e -> showLoginPage(stage));
-
-        Scene scene = new Scene(pane, 300, 400);
-        stage.setScene(scene);
-        stage.setTitle("Library Management System - Accounts Panel");
-        stage.show();
+        primaryStage.setScene(new Scene(pane, 300, 400));
+        primaryStage.show();
     }
 
     private void addBook() {
@@ -186,8 +287,13 @@ public class Main extends Application {
             String author = authorField.getText();
             String isbn = isbnField.getText();
 
-            library.addItem(new Book(id, title, author, isbn));
-            dialog.close();
+            if (!id.isEmpty() && !title.isEmpty() && !author.isEmpty() && !isbn.isEmpty()) {
+                library.addItem(new Book(id, title, author, isbn));
+                showAlert("Success", "Book added successfully.");
+                dialog.close();
+            } else {
+                showAlert("Error", "All fields are required.");
+            }
         });
 
         dialog.setScene(new Scene(pane, 300, 200));
@@ -198,21 +304,18 @@ public class Main extends Application {
         Stage dialog = new Stage();
         dialog.setTitle("Remove Book");
 
-        GridPane pane = new GridPane();
+        VBox pane = new VBox(10);
         pane.setPadding(new Insets(10, 10, 10, 10));
-        pane.setVgap(5);
-        pane.setHgap(5);
 
         TextField idField = new TextField();
         Button removeButton = new Button("Remove");
 
-        pane.add(new Label("ID:"), 0, 0);
-        pane.add(idField, 1, 0);
-        pane.add(removeButton, 1, 1);
+        pane.getChildren().addAll(new Label("Book ID:"), idField, removeButton);
 
         removeButton.setOnAction(e -> {
             String id = idField.getText();
             library.removeItem(id);
+            showAlert("Success", "Book removed successfully.");
             dialog.close();
         });
 
@@ -251,8 +354,13 @@ public class Main extends Application {
             String author = authorField.getText();
             String isbn = isbnField.getText();
 
-            library.editItem(id, title, author, isbn);
-            dialog.close();
+            if (!id.isEmpty() && !title.isEmpty() && !author.isEmpty() && !isbn.isEmpty()) {
+                library.editItem(id, title, author, isbn);
+                showAlert("Success", "Book edited successfully.");
+                dialog.close();
+            } else {
+                showAlert("Error", "All fields are required.");
+            }
         });
 
         dialog.setScene(new Scene(pane, 300, 200));
@@ -267,11 +375,9 @@ public class Main extends Application {
         pane.setPadding(new Insets(10, 10, 10, 10));
 
         library.getItems().forEach(item -> {
-            if (item instanceof Book) {
-                Book book = (Book) item;
-                Label label = new Label("ID: " + book.getId() + ", Title: " + book.getTitle() + ", Author: " + book.getAuthor());
-                pane.getChildren().add(label);
-            }
+            Book book = (Book) item;
+            Label label = new Label("ID: " + book.getId() + ", Title: " + book.getTitle() + ", Author: " + book.getAuthor());
+            pane.getChildren().add(label);
         });
 
         dialog.setScene(new Scene(pane, 400, 400));
@@ -289,7 +395,7 @@ public class Main extends Application {
 
         TextField nameField = new TextField();
         TextField idField = new TextField();
-        TextField passwordField = new TextField();
+        PasswordField passwordField = new PasswordField();
         Button addButton = new Button("Add");
 
         pane.add(new Label("Name:"), 0, 0);
@@ -305,8 +411,13 @@ public class Main extends Application {
             String id = idField.getText();
             String password = passwordField.getText();
 
-            library.addStudent(new Student(name, id, password));
-            dialog.close();
+            if (!name.isEmpty() && !id.isEmpty() && !password.isEmpty()) {
+                library.addStudent(new Student(name, id, password));
+                showAlert("Success", "Student added successfully.");
+                dialog.close();
+            } else {
+                showAlert("Error", "All fields are required.");
+            }
         });
 
         dialog.setScene(new Scene(pane, 300, 200));
@@ -323,29 +434,35 @@ public class Main extends Application {
         pane.setHgap(5);
 
         TextField studentIdField = new TextField();
-        TextField fineAmountField = new TextField();
+        TextField amountField = new TextField();
         Button addButton = new Button("Add");
 
         pane.add(new Label("Student ID:"), 0, 0);
         pane.add(studentIdField, 1, 0);
-        pane.add(new Label("Fine Amount:"), 0, 1);
-        pane.add(fineAmountField, 1, 1);
+        pane.add(new Label("Amount:"), 0, 1);
+        pane.add(amountField, 1, 1);
         pane.add(addButton, 1, 2);
 
         addButton.setOnAction(e -> {
             String studentId = studentIdField.getText();
-            double fineAmount = Double.parseDouble(fineAmountField.getText());
+            String amountText = amountField.getText();
 
-            Student student = library.getStudents().stream()
-                    .filter(s -> s.getId().equals(studentId))
-                    .findFirst()
-                    .orElse(null);
+            try {
+                double amount = Double.parseDouble(amountText);
+                Student student = library.getStudents().stream()
+                        .filter(s -> s.getId().equals(studentId))
+                        .findFirst()
+                        .orElse(null);
 
-            if (student != null) {
-                student.addFine(fineAmount);
-                dialog.close();
-            } else {
-                showAlert("Error", "Student not found.");
+                if (student != null) {
+                    student.addFine(amount);
+                    showAlert("Success", "Fine added successfully.");
+                    dialog.close();
+                } else {
+                    showAlert("Error", "Student not found.");
+                }
+            } catch (NumberFormatException ex) {
+                showAlert("Error", "Invalid amount.");
             }
         });
 
@@ -363,29 +480,35 @@ public class Main extends Application {
         pane.setHgap(5);
 
         TextField studentIdField = new TextField();
-        TextField fineAmountField = new TextField();
+        TextField amountField = new TextField();
         Button removeButton = new Button("Remove");
 
         pane.add(new Label("Student ID:"), 0, 0);
         pane.add(studentIdField, 1, 0);
-        pane.add(new Label("Fine Amount:"), 0, 1);
-        pane.add(fineAmountField, 1, 1);
+        pane.add(new Label("Amount:"), 0, 1);
+        pane.add(amountField, 1, 1);
         pane.add(removeButton, 1, 2);
 
         removeButton.setOnAction(e -> {
             String studentId = studentIdField.getText();
-            double fineAmount = Double.parseDouble(fineAmountField.getText());
+            String amountText = amountField.getText();
 
-            Student student = library.getStudents().stream()
-                    .filter(s -> s.getId().equals(studentId))
-                    .findFirst()
-                    .orElse(null);
+            try {
+                double amount = Double.parseDouble(amountText);
+                Student student = library.getStudents().stream()
+                        .filter(s -> s.getId().equals(studentId))
+                        .findFirst()
+                        .orElse(null);
 
-            if (student != null) {
-                student.removeFine(fineAmount);
-                dialog.close();
-            } else {
-                showAlert("Error", "Student not found.");
+                if (student != null) {
+                    student.removeFine(amount);
+                    showAlert("Success", "Fine removed successfully.");
+                    dialog.close();
+                } else {
+                    showAlert("Error", "Student not found.");
+                }
+            } catch (NumberFormatException ex) {
+                showAlert("Error", "Invalid amount.");
             }
         });
 
@@ -401,10 +524,8 @@ public class Main extends Application {
         pane.setPadding(new Insets(10, 10, 10, 10));
 
         library.getStudents().forEach(student -> {
-            if (student.getFine() > 0) {
-                Label label = new Label("Student ID: " + student.getId() + ", Fine: $" + student.getFine());
-                pane.getChildren().add(label);
-            }
+            Label label = new Label("Student ID: " + student.getId() + ", Name: " + student.getName() + ", Fine: $" + student.getFine());
+            pane.getChildren().add(label);
         });
 
         dialog.setScene(new Scene(pane, 400, 400));
@@ -418,11 +539,12 @@ public class Main extends Application {
         VBox pane = new VBox(10);
         pane.setPadding(new Insets(10, 10, 10, 10));
 
-        library.getStudents().forEach(student -> {
-            student.getBorrowedBooks().forEach(book -> {
-                Label label = new Label("Student ID: " + student.getId() + ", Book ID: " + book.getId() + ", Title: " + book.getTitle());
+        library.getItems().forEach(item -> {
+            Book book = (Book) item;
+            if (book.getBorrowedDate() != null) {
+                Label label = new Label("ID: " + book.getId() + ", Title: " + book.getTitle() + ", Borrowed Date: " + book.getBorrowedDate() + ", Borrowed By: " + book.getBorrowedBy());
                 pane.getChildren().add(label);
-            });
+            }
         });
 
         dialog.setScene(new Scene(pane, 400, 400));
@@ -433,31 +555,30 @@ public class Main extends Application {
         Stage dialog = new Stage();
         dialog.setTitle("Borrow Book");
 
-        GridPane pane = new GridPane();
+        VBox pane = new VBox(10);
         pane.setPadding(new Insets(10, 10, 10, 10));
-        pane.setVgap(5);
-        pane.setHgap(5);
 
-        TextField bookIdField = new TextField();
+        TextField idField = new TextField();
         Button borrowButton = new Button("Borrow");
 
-        pane.add(new Label("Book ID:"), 0, 0);
-        pane.add(bookIdField, 1, 0);
-        pane.add(borrowButton, 1, 1);
+        pane.getChildren().addAll(new Label("Book ID:"), idField, borrowButton);
 
         borrowButton.setOnAction(e -> {
-            String bookId = bookIdField.getText();
-            Book book = (Book) library.searchItemById(bookId);
+            String id = idField.getText();
+            Book book = (Book) library.getItemById(id);
 
-            if (book != null && book.isAvailable()) {
-                currentStudent.borrowBook(book);
-                showAlert("Success", "Book borrowed successfully.");
-                dialog.close();
-            } else if (book != null && !book.isAvailable()) {
-                showAlert("Error", "This book is already borrowed by another student.");
+            if (book != null && book.getBorrowedDate() == null) {
+                if (currentStudent.getBorrowedBooks().contains(book)) {
+                    showAlert("Error", "You already have this book.");
+                } else {
+                    currentStudent.borrowBook(book);
+                    book.borrow(currentStudent.getId());
+                    showAlert("Success", "Book borrowed successfully.");
+                }
             } else {
-                showAlert("Error", "Book not found.");
+                showAlert("Error", "Book not available.");
             }
+            dialog.close();
         });
 
         dialog.setScene(new Scene(pane, 300, 150));
@@ -468,31 +589,26 @@ public class Main extends Application {
         Stage dialog = new Stage();
         dialog.setTitle("Return Book");
 
-        GridPane pane = new GridPane();
+        VBox pane = new VBox(10);
         pane.setPadding(new Insets(10, 10, 10, 10));
-        pane.setVgap(5);
-        pane.setHgap(5);
 
-        TextField bookIdField = new TextField();
+        TextField idField = new TextField();
         Button returnButton = new Button("Return");
 
-        pane.add(new Label("Book ID:"), 0, 0);
-        pane.add(bookIdField, 1, 0);
-        pane.add(returnButton, 1, 1);
+        pane.getChildren().addAll(new Label("Book ID:"), idField, returnButton);
 
         returnButton.setOnAction(e -> {
-            String bookId = bookIdField.getText();
-            Book book = (Book) library.searchItemById(bookId);
+            String id = idField.getText();
+            Book book = (Book) library.getItemById(id);
 
-            if (book != null && !book.isAvailable() && currentStudent.getBorrowedBooks().contains(book)) {
+            if (book != null && book.getBorrowedDate() != null) {
                 currentStudent.returnBook(book);
+                book.returnBook();
                 showAlert("Success", "Book returned successfully.");
-                dialog.close();
-            } else if (book != null && book.isAvailable()) {
-                showAlert("Error", "This book is already available in the library.");
             } else {
-                showAlert("Error", "Book not found.");
+                showAlert("Error", "Book not borrowed.");
             }
+            dialog.close();
         });
 
         dialog.setScene(new Scene(pane, 300, 150));
@@ -506,10 +622,10 @@ public class Main extends Application {
         VBox pane = new VBox(10);
         pane.setPadding(new Insets(10, 10, 10, 10));
 
-        Label label = new Label("Outstanding Fine: $" + currentStudent.getFine());
+        Label label = new Label("Outstanding Fines: $" + currentStudent.getFine());
         pane.getChildren().add(label);
 
-        dialog.setScene(new Scene(pane, 300, 100));
+        dialog.setScene(new Scene(pane, 300, 150));
         dialog.show();
     }
 
@@ -521,7 +637,7 @@ public class Main extends Application {
         pane.setPadding(new Insets(10, 10, 10, 10));
 
         currentStudent.getBorrowedBooks().forEach(book -> {
-            Label label = new Label("Book ID: " + book.getId() + ", Title: " + book.getTitle());
+            Label label = new Label("ID: " + book.getId() + ", Title: " + book.getTitle() + ", Borrowed Date: " + book.getBorrowedDate());
             pane.getChildren().add(label);
         });
 
@@ -536,13 +652,13 @@ public class Main extends Application {
         VBox pane = new VBox(10);
         pane.setPadding(new Insets(10, 10, 10, 10));
 
-        library.getItems().stream()
-                .filter(item -> item instanceof Book && ((Book) item).isAvailable())
-                .forEach(item -> {
-                    Book book = (Book) item;
-                    Label label = new Label("ID: " + book.getId() + ", Title: " + book.getTitle() + ", Author: " + book.getAuthor());
-                    pane.getChildren().add(label);
-                });
+        library.getItems().forEach(item -> {
+            Book book = (Book) item;
+            if (book.getBorrowedDate() == null) {
+                Label label = new Label("ID: " + book.getId() + ", Title: " + book.getTitle() + ", Author: " + book.getAuthor());
+                pane.getChildren().add(label);
+            }
+        });
 
         dialog.setScene(new Scene(pane, 400, 400));
         dialog.show();

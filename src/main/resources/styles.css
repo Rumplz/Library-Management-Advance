@@ -1,0 +1,37 @@
+.button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: #fff;
+    -fx-cursor: hand;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+}
+
+.button:hover {
+    -fx-background-color: #3e8e41;
+}
+
+.text-field {
+    -fx-background-color: #fff;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1px;
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+}
+
+.label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.dialog-pane {
+    -fx-background-color: #f7f7f7;
+}
+
+.alert {
+    -fx-background-color: #333;
+    -fx-text-fill: #fff;
+}
+
+.alert-content-text {
+    -fx-font-size: 16px;
+}

@@ -2,26 +2,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Student {
-    private String name;
     private String id;
+    private String name;
     private String password;
     private double fine;
     private List<Book> borrowedBooks;
 
-    public Student(String name, String id, String password) {
-        this.name = name;
+    public Student(String id, String name, String password) {
         this.id = id;
+        this.name = name;
         this.password = password;
-        this.fine = 0.0;
+        this.fine = 0;
         this.borrowedBooks = new ArrayList<>();
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getPassword() {
@@ -31,13 +31,19 @@ public class Student {
     public double getFine() {
         return fine;
     }
-
-    public void addFine(double fine) {
-        this.fine += fine;
+    public void removeFine(double amount) {
+        if (this.fine >= amount) {
+            this.fine -= amount;
+        } else {
+            this.fine = 0;
+        }
+    }
+    public void addFine(double amount) {
+        this.fine += amount;
     }
 
-    public void removeFine(double fine) {
-        this.fine = Math.max(this.fine - fine, 0);
+    public void clearFine() {
+        this.fine = 0;
     }
 
     public List<Book> getBorrowedBooks() {
@@ -45,18 +51,14 @@ public class Student {
     }
 
     public void borrowBook(Book book) {
-        if (borrowedBooks.contains(book)) {
-            throw new IllegalStateException("You already have this book.");
-        }
         borrowedBooks.add(book);
-        book.setAvailable(false);
     }
 
     public void returnBook(Book book) {
-        if (!borrowedBooks.contains(book)) {
-            throw new IllegalStateException("You don't have this book.");
-        }
         borrowedBooks.remove(book);
-        book.setAvailable(true);
+    }
+
+    public boolean hasFine() {
+        return fine > 0;
     }
 }
