@@ -1,0 +1,137 @@
+/* styles.css */
+
+/* Root VBox */
+.root {
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 10px;
+}
+
+.pane {
+    -fx-background-color: #ffffff;
+    -fx-padding: 20px;
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+}
+
+.button {
+    -fx-background-color: #4CAF50; /* Green */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-min-width: 120px; /* set a minimum width for the button */
+    -fx-max-width: MAX; /* allow the button to grow up to the maximum available width */
+    -fx-text-alignment: CENTER; /* center the text horizontally */
+    -fx-wrap-text: true; /* allow the text to wrap to the next line if it's too long */
+}
+
+.textField {
+    -fx-padding: 5;
+    -fx-border-width: 1;
+    -fx-border-color: #ccc;
+    -fx-min-width: 200px; /* set a minimum width for the text field */
+    -fx-max-width: MAX; /* allow the text field to grow up to the maximum available width */
+}
+
+/* Labels */
+.titleLabel {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+.pane {
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 10;
+}
+
+.textField {
+    -fx-padding: 5;
+    -fx-border-width: 1;
+    -fx-border-color: #ccc;
+}
+
+.button {
+    -fx-padding: 5;
+    -fx-border-width: 1;
+    -fx-border-color: #ccc;
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: #ffffff;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #3e8e41;
+}
+/* Animation for the dialog */
+.dialog {
+    -fx-translate-x: 20; /* initial position slightly off-screen */
+    -fx-translate-y: 0;
+    -fx-opacity: 0.8; /* initial opacity */
+    -fx-background-color: #f7f7f7; /* light gray background */
+    -fx-padding: 20; /* add some padding */
+    -fx-border-radius: 10; /* rounded corners */
+    -fx-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* subtle box shadow */
+}
+
+.dialog.show {
+    -fx-translate-x: 0; /* final position on-screen */
+    -fx-translate-y: 0;
+    -fx-opacity: 1; /* final opacity */
+    -fx-transition: translate 0.3s ease-in, opacity 0.3s ease-in;
+}
+
+/* Animation for the buttons */
+.button {
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-translate-x: 0;
+    -fx-translate-y: 0;
+    -fx-box-shadow: none; /* remove default box shadow */
+    -fx-background-color: #4CAF50; /* green background */
+    -fx-text-fill: #ffffff; /* white text */
+    -fx-padding: 10 20; /* add some padding */
+    -fx-border-radius: 5; /* rounded corners */
+    -fx-cursor: hand; /* change cursor to hand */
+}
+
+.button:hover {
+    -fx-scale-x: 1.02; /* subtle scale increase */
+    -fx-scale-y: 1.02;
+    -fx-translate-x: -1; /* subtle translate */
+    -fx-translate-y: -1;
+    -fx-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* subtle box shadow */
+    -fx-background-color: #3e8e41; /* darker green background on hover */
+    -fx-transition: scale 0.2s ease-in, translate 0.2s ease-in, box-shadow 0.2s ease-in, background-color 0.2s ease-in;
+}
+
+.button:pressed {
+    -fx-scale-x: 0.98; /* subtle scale decrease */
+    -fx-scale-y: 0.98;
+    -fx-translate-x: 1; /* subtle translate */
+    -fx-translate-y: 1;
+    -fx-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); /* subtle box shadow */
+    -fx-background-color: #2e6c31; /* even darker green background on press */
+    -fx-transition: scale 0.2s ease-out, translate 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
+}
+
+/* Animation for the text fields */
+.textField {
+    -fx-opacity: 0.8; /* initial opacity */
+    -fx-background-color: #ffffff; /* white background */
+    -fx-padding: 10; /* add some padding */
+    -fx-border-radius: 5; /* rounded corners */
+    -fx-border-color: #cccccc; /* light gray border */
+}
+
+.textField.show {
+    -fx-opacity: 1; /* final opacity */
+    -fx-transition: opacity 0.3s ease-in;
+}
+
+/* Additional styles */
+.dialog .label {
+    -fx-font-size: 18; /* larger font size */
+    -fx-font-weight: bold; /* bold font */
+    -fx-text-fill: #333333; /* dark gray text */
+}
+
+.dialog .text-field {
+    -fx-margin: 10; /* add some margin */
+}

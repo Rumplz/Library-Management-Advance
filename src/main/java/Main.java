@@ -4,9 +4,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
-import java.util.Optional;
 
 public class Main extends Application {
     private Library library;
@@ -14,14 +13,25 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        library = new Library("My Library");
+        library = new Library("Iqra University Library Managment System ");
 
-        // Prepopulate library with books
+
         populateLibraryWithBooks();
 
-        // Prepopulate library with students
+
         populateLibraryWithStudents();
 
+
+        VBox root = new VBox();
+        root.getStyleClass().add("root");
+
+        Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+
+
+
+        // Set the scene to the primary stage
+        primaryStage.setScene(scene);
 
         showInitialPage(primaryStage);
     }
@@ -40,8 +50,8 @@ public class Main extends Application {
     }
 
     private void populateLibraryWithStudents() {
-        library.addStudent(new Student("John Doe", "student1", "password1"));
-        library.addStudent(new Student("Jane Smith", "student2", "password2"));
+        library.addStudent(new Student("Muhammad Mujtaba", "student1", "password1"));
+        library.addStudent(new Student("Muhammad Mustafa", "student2", "password2"));
     }
 
     private void showInitialPage(Stage primaryStage) {
@@ -49,29 +59,58 @@ public class Main extends Application {
 
         VBox pane = new VBox(10);
         pane.setPadding(new Insets(10, 10, 10, 10));
+        pane.getStyleClass().add("pane"); // Add CSS class to VBox
+
+        Label titleLabel = new Label("Chose Student Login OR Admin Login");
+        titleLabel.setFont(Font.font("Arial", 24)); // Set font size to 24
+        titleLabel.setStyle("-fx-font-weight: bold"); // Make it bold
+        titleLabel.getStyleClass().add("titleLabel"); // Add CSS class to title label
+        pane.getChildren().add(titleLabel);
 
         Button studentButton = new Button("Student Login");
+        studentButton.getStyleClass().add("button"); // Add CSS class to Button
+
         Button adminButton = new Button("Admin Login");
+        adminButton.getStyleClass().add("button"); // Add CSS class to Button
+
         pane.getChildren().addAll(studentButton, adminButton);
 
         studentButton.setOnAction(e -> showLoginPage(primaryStage));
         adminButton.setOnAction(e -> showAdminLoginPage(primaryStage));
 
-        primaryStage.setScene(new Scene(pane, 300, 200));
+        Scene initialScene = new Scene(pane, 300, 200); // Rename the scene variable
+        initialScene.getStylesheets().add("style.css"); // Add CSS stylesheet
+        primaryStage.setScene(initialScene);
         primaryStage.show();
     }
-
     private void showLoginPage(Stage primaryStage) {
-        primaryStage.setTitle("Library System - Student Login");
+        primaryStage.setTitle("Student Login");
 
         VBox pane = new VBox(10);
         pane.setPadding(new Insets(10, 10, 10, 10));
+        pane.getStyleClass().add("pane"); // Add CSS class to VBox
+
+        // Add a big title label
+        Label titleLabel = new Label("Student Login");
+        titleLabel.setFont(Font.font("Arial", 24)); // Set font size to 24
+        titleLabel.setStyle("-fx-font-weight: bold"); // Make it bold
+        titleLabel.getStyleClass().add("titleLabel"); // Add CSS class to title label
+        pane.getChildren().add(titleLabel);
 
         TextField usernameField = new TextField();
+        usernameField.getStyleClass().add("textField"); // Add CSS class to TextField
+
         PasswordField passwordField = new PasswordField();
+        passwordField.getStyleClass().add("textField"); // Add CSS class to PasswordField
+
         Button loginButton = new Button("Login");
-        Button signupButton = new Button("New student? SignUp Here!");
+        loginButton.getStyleClass().add("button"); // Add CSS class to Button
+
+        Button signupButton = new Button("SignUp Here!");
+        signupButton.getStyleClass().add("button"); // Add CSS class to Button
+
         Button backButton = new Button("Back");
+        backButton.getStyleClass().add("button"); // Add CSS class to Button
 
         pane.getChildren().addAll(new Label("Username:"), usernameField, new Label("Password:"), passwordField, loginButton, signupButton, backButton);
 
@@ -84,7 +123,7 @@ public class Main extends Application {
                     .findFirst()
                     .orElse(null);
 
-            if (currentStudent != null) {
+            if (currentStudent!= null) {
                 showStudentPanel(primaryStage);
                 if (currentStudent.getFine() > 0) {
                     showAlert("Notification", "You have outstanding fines: $" + currentStudent.getFine());
@@ -97,7 +136,9 @@ public class Main extends Application {
         signupButton.setOnAction(e -> showSignupPage(primaryStage));
         backButton.setOnAction(e -> showInitialPage(primaryStage));
 
-        primaryStage.setScene(new Scene(pane, 300, 200));
+        Scene loginScene = new Scene(pane, 300, 200); // Rename the scene variable
+        loginScene.getStylesheets().add("style.css"); // Add CSS stylesheet
+        primaryStage.setScene(loginScene);
         primaryStage.show();
     }
 
@@ -106,11 +147,26 @@ public class Main extends Application {
 
         VBox pane = new VBox(10);
         pane.setPadding(new Insets(10, 10, 10, 10));
+        pane.getStyleClass().add("pane"); // Add CSS class to VBox
+
+        // Add a big title label
+        Label titleLabel = new Label("Admin Login");
+        titleLabel.setFont(Font.font("Arial", 24)); // Set font size to 24
+        titleLabel.setStyle("-fx-font-weight: bold"); // Make it bold
+        titleLabel.getStyleClass().add("titleLabel"); // Add CSS class to title label
+        pane.getChildren().add(titleLabel);
 
         TextField usernameField = new TextField();
+        usernameField.getStyleClass().add("textField"); // Add CSS class to TextField
+
         PasswordField passwordField = new PasswordField();
+        passwordField.getStyleClass().add("textField"); // Add CSS class to PasswordField
+
         Button loginButton = new Button("Login");
+        loginButton.getStyleClass().add("button"); // Add CSS class to Button
+
         Button backButton = new Button("Back");
+        backButton.getStyleClass().add("button"); // Add CSS class to Button
 
         pane.getChildren().addAll(new Label("Username:"), usernameField, new Label("Password:"), passwordField, loginButton, backButton);
 
@@ -129,10 +185,11 @@ public class Main extends Application {
 
         backButton.setOnAction(e -> showInitialPage(primaryStage));
 
-        primaryStage.setScene(new Scene(pane, 300, 200));
+        Scene adminLoginScene = new Scene(pane, 300, 200); // Rename the scene variable
+        adminLoginScene.getStylesheets().add("style.css"); // Add CSS stylesheet
+        primaryStage.setScene(adminLoginScene);
         primaryStage.show();
     }
-
     private void showSignupPage(Stage primaryStage) {
         primaryStage.setTitle("Sign Up");
 
@@ -140,28 +197,45 @@ public class Main extends Application {
         pane.setPadding(new Insets(10, 10, 10, 10));
         pane.setVgap(5);
         pane.setHgap(5);
+        pane.getStyleClass().add("pane"); // Add CSS class to GridPane
+
+        // Add a big title label
+        Label titleLabel = new Label("Sign Up");
+        titleLabel.setFont(Font.font("Arial", 24)); // Set font size to 24
+        titleLabel.setStyle("-fx-font-weight: bold"); // Make it bold
+        titleLabel.getStyleClass().add("titleLabel"); // Add CSS class to title label
+        pane.add(titleLabel, 0, 0, 2, 1); // Span across two columns
 
         TextField nameField = new TextField();
-        TextField idField = new TextField();
-        PasswordField passwordField = new PasswordField();
-        Button signupButton = new Button("Sign Up");
-        Button backButton = new Button("Back");
+        nameField.getStyleClass().add("textField"); // Add CSS class to TextField
 
-        pane.add(new Label("Name:"), 0, 0);
-        pane.add(nameField, 1, 0);
-        pane.add(new Label("ID:"), 0, 1);
-        pane.add(idField, 1, 1);
-        pane.add(new Label("Password:"), 0, 2);
-        pane.add(passwordField, 1, 2);
-        pane.add(signupButton, 1, 3);
-        pane.add(backButton, 1, 4);
+        TextField idField = new TextField();
+        idField.getStyleClass().add("textField"); // Add CSS class to TextField
+
+        PasswordField passwordField = new PasswordField();
+        passwordField.getStyleClass().add("textField"); // Add CSS class to PasswordField
+
+        Button signupButton = new Button("Sign Up");
+        signupButton.getStyleClass().add("button"); // Add CSS class to Button
+
+        Button backButton = new Button("Back");
+        backButton.getStyleClass().add("button"); // Add CSS class to Button
+
+        pane.add(new Label("Name:"), 0, 1);
+        pane.add(nameField, 1, 1);
+        pane.add(new Label("ID:"), 0, 2);
+        pane.add(idField, 1, 2);
+        pane.add(new Label("Password:"), 0, 3);
+        pane.add(passwordField, 1, 3);
+        pane.add(signupButton, 1, 4);
+        pane.add(backButton, 1, 5);
 
         signupButton.setOnAction(e -> {
             String name = nameField.getText();
             String id = idField.getText();
             String password = passwordField.getText();
 
-            if (!name.isEmpty() && !id.isEmpty() && !password.isEmpty()) {
+            if (!name.isEmpty() &&!id.isEmpty() &&!password.isEmpty()) {
                 library.addStudent(new Student(name, id, password));
                 showAlert("Success", "Account created successfully.");
                 showLoginPage(primaryStage);
@@ -172,7 +246,9 @@ public class Main extends Application {
 
         backButton.setOnAction(e -> showLoginPage(primaryStage));
 
-        primaryStage.setScene(new Scene(pane, 300, 200));
+        Scene signupScene = new Scene(pane, 300, 200); // Rename the scene variable
+        signupScene.getStylesheets().add("style.css"); // Add CSS stylesheet
+        primaryStage.setScene(signupScene);
         primaryStage.show();
     }
 
@@ -181,17 +257,37 @@ public class Main extends Application {
 
         VBox pane = new VBox(10);
         pane.setPadding(new Insets(10, 10, 10, 10));
+        pane.getStyleClass().add("pane"); // Add CSS class to VBox
 
         Button addBookButton = new Button("Add Book");
+        addBookButton.getStyleClass().add("button"); // Add CSS class to Button
+
         Button removeBookButton = new Button("Remove Book");
+        removeBookButton.getStyleClass().add("button"); // Add CSS class to Button
+
         Button editBookButton = new Button("Edit Book");
+        editBookButton.getStyleClass().add("button"); // Add CSS class to Button
+
         Button viewBooksButton = new Button("View Books");
+        viewBooksButton.getStyleClass().add("button"); // Add CSS class to Button
+
         Button addStudentButton = new Button("Add Student");
+        addStudentButton.getStyleClass().add("button"); // Add CSS class to Button
+
         Button addFineButton = new Button("Add Fine");
+        addFineButton.getStyleClass().add("button"); // Add CSS class to Button
+
         Button removeFineButton = new Button("Remove Fine");
+        removeFineButton.getStyleClass().add("button"); // Add CSS class to Button
+
         Button viewAllFinesButton = new Button("View All Fines");
+        viewAllFinesButton.getStyleClass().add("button"); // Add CSS class to Button
+
         Button viewAllBorrowedBooksButton = new Button("View All Borrowed Books");
+        viewAllBorrowedBooksButton.getStyleClass().add("button"); // Add CSS class to Button
+
         Button logoutButton = new Button("Logout");
+        logoutButton.getStyleClass().add("button"); // Add CSS class to Button
 
         pane.getChildren().addAll(addBookButton, removeBookButton, editBookButton, viewBooksButton, addStudentButton, addFineButton, removeFineButton, viewAllFinesButton, viewAllBorrowedBooksButton, logoutButton);
 
@@ -204,9 +300,11 @@ public class Main extends Application {
         removeFineButton.setOnAction(e -> removeFine());
         viewAllFinesButton.setOnAction(e -> viewAllFines());
         viewAllBorrowedBooksButton.setOnAction(e -> viewAllBorrowedBooks());
-        logoutButton.setOnAction(e -> showLoginPage(primaryStage));
+        logoutButton.setOnAction(e -> showAdminLoginPage(primaryStage));
 
-        primaryStage.setScene(new Scene(pane, 300, 400));
+        Scene adminPanelScene = new Scene(pane, 300, 400); // Rename the scene variable
+        adminPanelScene.getStylesheets().add("style.css"); // Add CSS stylesheet
+        primaryStage.setScene(adminPanelScene);
         primaryStage.show();
     }
 
@@ -264,12 +362,22 @@ public class Main extends Application {
         pane.setPadding(new Insets(10, 10, 10, 10));
         pane.setVgap(5);
         pane.setHgap(5);
+        pane.getStyleClass().add("pane"); // Add CSS class to GridPane
 
         TextField idField = new TextField();
+        idField.getStyleClass().add("textField"); // Add CSS class to TextField
+
         TextField titleField = new TextField();
+        titleField.getStyleClass().add("textField"); // Add CSS class to TextField
+
         TextField authorField = new TextField();
+        authorField.getStyleClass().add("textField"); // Add CSS class to TextField
+
         TextField isbnField = new TextField();
+        isbnField.getStyleClass().add("textField"); // Add CSS class to TextField
+
         Button addButton = new Button("Add");
+        addButton.getStyleClass().add("button"); // Add CSS class to Button
 
         pane.add(new Label("ID:"), 0, 0);
         pane.add(idField, 1, 0);
@@ -296,7 +404,9 @@ public class Main extends Application {
             }
         });
 
-        dialog.setScene(new Scene(pane, 300, 200));
+        Scene addBookScene = new Scene(pane, 300, 200); // Rename the scene variable
+        addBookScene.getStylesheets().add("styles.css"); // Add CSS stylesheet
+        dialog.setScene(addBookScene);
         dialog.show();
     }
 
