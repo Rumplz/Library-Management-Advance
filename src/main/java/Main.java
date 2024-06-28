@@ -472,7 +472,7 @@ public class Main extends Application {
                 showAlert("Error", "All fields are required.");
             }
         });
-
+//
         dialog.setScene(new Scene(pane, 300, 200));
         dialog.show();
     }
