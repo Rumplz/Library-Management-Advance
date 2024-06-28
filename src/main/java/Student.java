@@ -61,4 +61,4 @@ public class Student {
     public boolean hasFine() {
         return fine > 0;
     }
-}  ////
+}
