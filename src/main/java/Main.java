@@ -57,8 +57,8 @@ public class Main extends Application {
     private void showInitialPage(Stage primaryStage) {
         primaryStage.setTitle("Library System");
 
-        VBox pane = new VBox(10);
-        pane.setPadding(new Insets(10, 10, 10, 10));
+        VBox pane = new VBox(100);
+        pane.setPadding(new Insets(100, 100, 100, 100));
         pane.getStyleClass().add("pane"); // Add CSS class to VBox
 
         Label titleLabel = new Label("Chose Student Login OR Admin Login");
@@ -78,7 +78,7 @@ public class Main extends Application {
         studentButton.setOnAction(e -> showLoginPage(primaryStage));
         adminButton.setOnAction(e -> showAdminLoginPage(primaryStage));
 
-        Scene initialScene = new Scene(pane, 300, 200); // Rename the scene variable
+        Scene initialScene = new Scene(pane, 1000, 1000); // Rename the scene variable
         initialScene.getStylesheets().add("style.css"); // Add CSS stylesheet
         primaryStage.setScene(initialScene);
         primaryStage.show();
@@ -136,8 +136,8 @@ public class Main extends Application {
         signupButton.setOnAction(e -> showSignupPage(primaryStage));
         backButton.setOnAction(e -> showInitialPage(primaryStage));
 
-        Scene loginScene = new Scene(pane, 300, 200); // Rename the scene variable
-        loginScene.getStylesheets().add("style.css"); // Add CSS stylesheet
+        Scene loginScene = new Scene(pane, 1000, 1000); // Rename the scene variable
+        loginScene.getStylesheets().add("stylee.css"); // Add CSS stylesheet
         primaryStage.setScene(loginScene);
         primaryStage.show();
     }
@@ -185,7 +185,7 @@ public class Main extends Application {
 
         backButton.setOnAction(e -> showInitialPage(primaryStage));
 
-        Scene adminLoginScene = new Scene(pane, 300, 200); // Rename the scene variable
+        Scene adminLoginScene = new Scene(pane, 1000, 1000); // Rename the scene variable
         adminLoginScene.getStylesheets().add("style.css"); // Add CSS stylesheet
         primaryStage.setScene(adminLoginScene);
         primaryStage.show();
@@ -246,7 +246,7 @@ public class Main extends Application {
 
         backButton.setOnAction(e -> showLoginPage(primaryStage));
 
-        Scene signupScene = new Scene(pane, 300, 200); // Rename the scene variable
+        Scene signupScene = new Scene(pane, 1000, 1000); // Rename the scene variable
         signupScene.getStylesheets().add("style.css"); // Add CSS stylesheet
         primaryStage.setScene(signupScene);
         primaryStage.show();
@@ -302,7 +302,7 @@ public class Main extends Application {
         viewAllBorrowedBooksButton.setOnAction(e -> viewAllBorrowedBooks());
         logoutButton.setOnAction(e -> showAdminLoginPage(primaryStage));
 
-        Scene adminPanelScene = new Scene(pane, 300, 400); // Rename the scene variable
+        Scene adminPanelScene = new Scene(pane, 1000, 1000); // Rename the scene variable
         adminPanelScene.getStylesheets().add("style.css"); // Add CSS stylesheet
         primaryStage.setScene(adminPanelScene);
         primaryStage.show();
@@ -324,7 +324,7 @@ public class Main extends Application {
         viewAllBorrowedBooksButton.setOnAction(e -> viewAllBorrowedBooks());
         logoutButton.setOnAction(e -> showLoginPage(primaryStage));
 
-        primaryStage.setScene(new Scene(pane, 300, 200));
+        primaryStage.setScene(new Scene(pane, 1000, 1000));
         primaryStage.show();
     }
 
@@ -333,13 +333,25 @@ public class Main extends Application {
 
         VBox pane = new VBox(10);
         pane.setPadding(new Insets(10, 10, 10, 10));
+        pane.getStyleClass().add("pane"); // Add CSS class to VBox
 
         Button borrowBookButton = new Button("Borrow Book");
+        borrowBookButton.getStyleClass().add("button"); // Add CSS class to Button
+
         Button returnBookButton = new Button("Return Book");
+        returnBookButton.getStyleClass().add("button"); // Add CSS class to Button
+
         Button viewFinesButton = new Button("View Fines");
+        viewFinesButton.getStyleClass().add("button"); // Add CSS class to Button
+
         Button viewBorrowedBooksButton = new Button("View Borrowed Books");
+        viewBorrowedBooksButton.getStyleClass().add("button"); // Add CSS class to Button
+
         Button viewAvailableBooksButton = new Button("View Available Books");
+        viewAvailableBooksButton.getStyleClass().add("button"); // Add CSS class to Button
+
         Button logoutButton = new Button("Logout");
+        logoutButton.getStyleClass().add("button"); // Add CSS class to Button
 
         pane.getChildren().addAll(borrowBookButton, returnBookButton, viewFinesButton, viewBorrowedBooksButton, viewAvailableBooksButton, logoutButton);
 
@@ -350,7 +362,9 @@ public class Main extends Application {
         viewAvailableBooksButton.setOnAction(e -> viewAvailableBooks());
         logoutButton.setOnAction(e -> showLoginPage(primaryStage));
 
-        primaryStage.setScene(new Scene(pane, 300, 400));
+        Scene scene = new Scene(pane, 1000, 1000);
+        scene.getStylesheets().add("style.css"); // Add CSS stylesheet
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
@@ -404,8 +418,8 @@ public class Main extends Application {
             }
         });
 
-        Scene addBookScene = new Scene(pane, 300, 200); // Rename the scene variable
-        addBookScene.getStylesheets().add("styles.css"); // Add CSS stylesheet
+        Scene addBookScene = new Scene(pane, 1000, 1000); // Rename the scene variable
+        addBookScene.getStylesheets().add("style.css"); // Add CSS stylesheet
         dialog.setScene(addBookScene);
         dialog.show();
     }
@@ -429,7 +443,9 @@ public class Main extends Application {
             dialog.close();
         });
 
-        dialog.setScene(new Scene(pane, 300, 150));
+        Scene removeBookScene = new Scene(pane, 1000, 1000); // Rename the scene variable
+        removeBookScene.getStylesheets().add("style.css"); // Add CSS stylesheet
+        dialog.setScene(removeBookScene);
         dialog.show();
     }
 
@@ -473,7 +489,7 @@ public class Main extends Application {
             }
         });
 //
-        dialog.setScene(new Scene(pane, 300, 200));
+        dialog.setScene(new Scene(pane, 1000, 1000));
         dialog.show();
     }
 
@@ -483,14 +499,18 @@ public class Main extends Application {
 
         VBox pane = new VBox(10);
         pane.setPadding(new Insets(10, 10, 10, 10));
+        pane.getStyleClass().add("root"); // Add CSS class to VBox
 
         library.getItems().forEach(item -> {
             Book book = (Book) item;
             Label label = new Label("ID: " + book.getId() + ", Title: " + book.getTitle() + ", Author: " + book.getAuthor());
+            label.getStyleClass().add("label"); // Add CSS class to Label
             pane.getChildren().add(label);
         });
 
-        dialog.setScene(new Scene(pane, 400, 400));
+        Scene scene = new Scene(pane, 1000, 1000);
+        scene.getStylesheets().add("style.css"); // Add CSS stylesheet
+        dialog.setScene(scene);
         dialog.show();
     }
 
@@ -530,7 +550,7 @@ public class Main extends Application {
             }
         });
 
-        dialog.setScene(new Scene(pane, 300, 200));
+        dialog.setScene(new Scene(pane, 1000, 1000));
         dialog.show();
     }
 
@@ -576,7 +596,7 @@ public class Main extends Application {
             }
         });
 
-        dialog.setScene(new Scene(pane, 300, 200));
+        dialog.setScene(new Scene(pane, 1000, 1000));
         dialog.show();
     }
 
@@ -622,7 +642,7 @@ public class Main extends Application {
             }
         });
 
-        dialog.setScene(new Scene(pane, 300, 200));
+        dialog.setScene(new Scene(pane, 1000, 1000));
         dialog.show();
     }
 
@@ -632,13 +652,17 @@ public class Main extends Application {
 
         VBox pane = new VBox(10);
         pane.setPadding(new Insets(10, 10, 10, 10));
+        pane.getStyleClass().add("root"); // Add CSS class to VBox
 
         library.getStudents().forEach(student -> {
             Label label = new Label("Student ID: " + student.getId() + ", Name: " + student.getName() + ", Fine: $" + student.getFine());
+            label.getStyleClass().add("label"); // Add CSS class to Label
             pane.getChildren().add(label);
         });
 
-        dialog.setScene(new Scene(pane, 400, 400));
+        Scene scene = new Scene(pane, 1000, 1000);
+        scene.getStylesheets().add("style.css"); // Add CSS stylesheet
+        dialog.setScene(scene);
         dialog.show();
     }
 
@@ -652,12 +676,17 @@ public class Main extends Application {
         library.getItems().forEach(item -> {
             Book book = (Book) item;
             if (book.getBorrowedDate() != null) {
+
                 Label label = new Label("ID: " + book.getId() + ", Title: " + book.getTitle() + ", Borrowed Date: " + book.getBorrowedDate() + ", Borrowed By: " + book.getBorrowedBy());
+                label.getStyleClass().add("label");
                 pane.getChildren().add(label);
+
             }
         });
 
-        dialog.setScene(new Scene(pane, 400, 400));
+        Scene scene = new Scene(pane, 1000, 1000);
+        scene.getStylesheets().add("style.css"); // Add CSS stylesheet
+        dialog.setScene(scene);
         dialog.show();
     }
 
@@ -751,7 +780,7 @@ public class Main extends Application {
             pane.getChildren().add(label);
         });
 
-        dialog.setScene(new Scene(pane, 400, 400));
+        dialog.setScene(new Scene(pane, 1000, 1000));
         dialog.show();
     }
 
@@ -761,16 +790,22 @@ public class Main extends Application {
 
         VBox pane = new VBox(10);
         pane.setPadding(new Insets(10, 10, 10, 10));
+        pane.getStyleClass().add("pane"); // Add CSS class to VBox
 
         library.getItems().forEach(item -> {
             Book book = (Book) item;
             if (book.getBorrowedDate() == null) {
                 Label label = new Label("ID: " + book.getId() + ", Title: " + book.getTitle() + ", Author: " + book.getAuthor());
+                label.getStyleClass().add("label"); // Add CSS class to Label
+                label.setFont(Font.font("Arial", 14)); // Set font family and size
+                label.setTextFill(javafx.scene.paint.Color.BLACK); // Set text color
                 pane.getChildren().add(label);
             }
         });
 
-        dialog.setScene(new Scene(pane, 400, 400));
+        Scene scene = new Scene(pane, 1000, 1000);
+        scene.getStylesheets().add("style.css"); // Add CSS stylesheet
+        dialog.setScene(scene);
         dialog.show();
     }
 

@@ -12,22 +12,23 @@ public class Library {
         admins = new ArrayList<>();
         initializeAdmin();
     }
-    ////
+    ////  ////
     public void initializeLibrary() {
-        items.add(new Book("B001", "The Great Gatsby", "F. Scott Fitzgerald", "9780743273565"));
-        items.add(new Book("B002", "1984", "George Orwell", "9780451524935"));
-        items.add(new Book("B003", "To Kill a Mockingbird", "Harper Lee", "9780060935467"));
-        items.add(new Book("B004", "Pride and Prejudice", "Jane Austen", "9780141439518"));
-        items.add(new Book("B005", "The Catcher in the Rye", "J.D. Salinger", "9780316769488"));
-        items.add(new Book("B006", "The Hobbit", "J.R.R. Tolkien", "9780547928227"));
-        items.add(new Book("B007", "Moby Dick", "Herman Melville", "9781503280786"));
-        items.add(new Book("B008", "The Odyssey", "Homer", "9780140268867"));
-        items.add(new Book("B009", "War and Peace", "Leo Tolstoy", "9780199232765"));
-        items.add(new Book("B010", "The Divine Comedy", "Dante Alighieri", "9780140448955"));
+        items.add(new Book("1", "The Great Gatsby", "F. Scott Fitzgerald", "10"));
+        items.add(new Book("2", "1984", "George Orwell", "11"));
+        items.add(new Book("3", "To Kill a Mockingbird", "Harper Lee", "12"));
+        items.add(new Book("4", "Pride and Prejudice", "Jane Austen", "13"));
+        items.add(new Book("5", "The Catcher in the Rye", "J.D. Salinger", "14"));
+        items.add(new Book("6", "The Hobbit", "J.R.R. Tolkien", "15"));
+        items.add(new Book("7", "Moby Dick", "Herman Melville", "16"));
+        items.add(new Book("8", "The Odyssey", "Homer", "17"));
+        items.add(new Book("9", "War and Peace", "Leo Tolstoy", "18"));
+        items.add(new Book("10", "The Divine Comedy", "Dante Alighieri", "19"));
     }
 
     private void initializeAdmin() {
         admins.add(new Admin("admin", "admin123"));
+        admins.add(new Admin("1", "1"));
     }
 
     public List<LibraryItem> getItems() {
